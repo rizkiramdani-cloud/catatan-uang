@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#06120f" />
+  <meta name="description" content="KINOY Money Tracker — dashboard keuangan pribadi untuk mencatat transaksi, anggaran, tabungan, dan laporan." />
+  <title>KINOY Money Tracker V2.1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="dark">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">K</span><span><b>KINOY</b><small>MONEY TRACKER <em>V2.1</em></small></span></a>
+      <div class="profile-mini"><div class="avatar">R</div><div><b>Rizki Ramdani</b><small>Premium User ✦</small></div></div>
+      <nav id="navigation">
+        <button class="nav-link active" data-page="dashboard">⌂ <span>Beranda</span></button>
+        <button class="nav-link" data-page="transactions">▤ <span>Transaksi</span></button>
+        <button class="nav-link" data-page="calendar">▦ <span>Kalender</span></button>
+        <button class="nav-link" data-page="budget">◉ <span>Anggaran</span></button>
+        <button class="nav-link" data-page="savings">▣ <span>Tabungan</span></button>
+        <button class="nav-link" data-page="reports">▥ <span>Laporan</span></button>
+        <button class="nav-link" data-page="calculator">⊞ <span>Kalkulator</span></button>
+        <button class="nav-link" data-page="notifications">♧ <span>Notifikasi</span><i class="nav-count" id="notificationCount">3</i></button>
+        <button class="nav-link" data-page="settings">⚙ <span>Pengaturan</span></button>
+      </nav>
+      <div class="sidebar-foot"><span class="online-dot"></span> Data tersimpan di perangkat ini</div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div><div class="eyebrow">PERSONAL FINANCE DASHBOARD</div><h1 id="pageTitle">Dashboard Keuangan</h1></div>
+        <div class="top-actions">
+          <label class="searchbox">⌕ <input id="globalSearch" placeholder="Cari transaksi..." /></label>
+          <button class="icon-button" id="bellButton" title="Notifikasi">♧<i></i></button>
+          <div class="date-chip" id="todayLabel">Rabu, 11 Nov 2026</div>
+          <button class="mobile-menu" id="mobileMenu">☰</button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-dashboard">
+        <div class="welcome-row"><div><h2>Halo, Rizki! 👋</h2><p>Semangat mengelola keuanganmu. Setiap keputusan kecil berarti.</p></div><button class="primary-btn" data-open-add>＋ Tambah Transaksi</button></div>
+        <div class="stats-grid">
+          <article class="stat-card green"><div class="stat-top"><span>Saldo Total</span><span class="stat-icon">▣</span></div><strong id="totalBalance">Rp 2.850.000</strong><small>↗ <span id="balanceTrend">Keuangan terpantau</span></small></article>
+          <article class="stat-card blue"><div class="stat-top"><span>Total Pemasukan</span><span class="stat-icon">↑</span></div><strong id="totalIncome">Rp 4.200.000</strong><small>↗ Bulan berjalan</small></article>
+          <article class="stat-card red"><div class="stat-top"><span>Total Pengeluaran</span><span class="stat-icon">↓</span></div><strong id="totalExpense">Rp 1.350.000</strong><small>↘ Bulan berjalan</small></article>
+          <article class="stat-card purple"><div class="stat-top"><span>Target Tabungan</span><span class="stat-icon">✧</span></div><strong id="savingProgress">60%</strong><small>Progres target aktif</small></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel chart-panel"><div class="panel-head"><div><h3>Grafik Keuangan</h3><p>Perbandingan pemasukan dan pengeluaran</p></div><select id="chartRange"><option value="7">7 Hari</option><option value="30">30 Hari</option><option value="6">6 Bulan</option></select></div><canvas id="financeChart" height="230"></canvas><div class="legend"><span><i class="legend-dot income"></i>Pemasukan</span><span><i class="legend-dot expense"></i>Pengeluaran</span></div></article>
+          <article class="panel budget-panel"><div class="panel-head"><div><h3>Progress Anggaran</h3><p>Pemakaian anggaran bulan ini</p></div><button class="text-btn" data-page-link="budget">Lihat semua →</button></div><div id="dashboardBudgets"></div></article>
+          <article class="panel quick-panel"><div class="panel-head"><div><h3>Quick Add</h3><p>Catat transaksi dalam hitungan detik</p></div></div><div class="quick-buttons"><button class="income-btn" data-open-add data-type="income">＋ Pemasukan</button><button class="expense-btn" data-open-add data-type="expense">－ Pengeluaran</button></div><div class="quick-note">Transaksi baru langsung masuk ke ringkasan dan laporan.</div></article>
+          <article class="panel recent-panel"><div class="panel-head"><div><h3>Transaksi Terbaru</h3><p>Aktivitas keuangan terakhir</p></div><button class="text-btn" data-page-link="transactions">Lihat semua →</button></div><div id="recentTransactions"></div></article>
+        </div>
+      </section>
+
+      <section class="page" id="page-transactions">
+        <div class="section-heading"><div><h2>Semua Transaksi</h2><p>Kelola pemasukan dan pengeluaranmu.</p></div><button class="primary-btn" data-open-add>＋ Tambah Transaksi</button></div>
+        <div class="panel table-panel"><div class="table-tools"><input id="transactionSearch" placeholder="Cari keterangan atau kategori..." /><select id="transactionFilter"><option value="all">Semua jenis</option><option value="income">Pemasukan</option><option value="expense">Pengeluaran</option></select></div><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th>Jenis</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody id="transactionRows"></tbody></table></div><div class="empty-state" id="transactionEmpty" hidden>Belum ada transaksi yang cocok.</div></div>
+      </section>
+
+      <section class="page" id="page-calendar">
+        <div class="section-heading"><div><h2>Kalender Keuangan</h2><p>Pantau aktivitas transaksi berdasarkan tanggal.</p></div></div>
+        <div class="calendar-layout"><article class="panel calendar-panel"><div class="calendar-head"><button id="prevMonth">‹</button><h3 id="calendarMonth">November 2026</h3><button id="nextMonth">›</button></div><div class="calendar-grid calendar-week"><span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span></div><div class="calendar-grid" id="calendarDays"></div></article><article class="panel day-panel"><h3 id="selectedDateTitle">Transaksi tanggal ini</h3><div id="dayTransactions" class="stack-list"></div><button class="secondary-btn" data-open-add>＋ Tambah transaksi di tanggal ini</button></article></div>
+      </section>
+
+      <section class="page" id="page-budget">
+        <div class="section-heading"><div><h2>Anggaran & Peringatan</h2><p>Tetapkan batas pengeluaran agar tetap terkendali.</p></div><button class="primary-btn" id="addBudgetButton">＋ Buat Anggaran</button></div>
+        <div class="budget-summary panel"><div><span>Total anggaran</span><strong id="budgetTotal">Rp 1.000.000</strong></div><div><span>Total terpakai</span><strong id="budgetUsed">Rp 420.000</strong></div><div><span>Sisa anggaran</span><strong id="budgetRemaining">Rp 580.000</strong></div></div>
+        <div class="budget-cards" id="budgetCards"></div>
+      </section>
+
+      <section class="page" id="page-savings">
+        <div class="section-heading"><div><h2>Tabungan & Target</h2><p>Bangun kebiasaan menabung untuk tujuanmu.</p></div><button class="primary-btn" id="addGoalButton">＋ Tambah Target</button></div>
+        <div id="savingsCards" class="savings-grid"></div>
+        <article class="panel history-panel"><h3>Riwayat Setoran</h3><div id="depositHistory" class="stack-list"></div></article>
+      </section>
+
+      <section class="page" id="page-reports">
+        <div class="section-heading"><div><h2>Laporan & Statistik</h2><p>Ringkasan kondisi keuanganmu.</p></div><select id="reportPeriod"><option value="month">Bulan ini</option><option value="all">Semua waktu</option></select></div>
+        <div class="stats-grid report-stats"><article class="stat-card green"><span>Pemasukan</span><strong id="reportIncome">Rp 0</strong></article><article class="stat-card red"><span>Pengeluaran</span><strong id="reportExpense">Rp 0</strong></article><article class="stat-card blue"><span>Selisih</span><strong id="reportNet">Rp 0</strong></article></div>
+        <div class="reports-grid"><article class="panel"><h3>Komposisi Pengeluaran</h3><canvas id="categoryChart" height="260"></canvas><div id="categoryLegend" class="category-legend"></div></article><article class="panel"><h3>Ringkasan Kategori</h3><div id="categorySummary" class="stack-list"></div></article></div>
+      </section>
+
+      <section class="page" id="page-calculator">
+        <div class="section-heading"><div><h2>Kalkulator Keuangan</h2><p>Hitung nominal dengan cepat.</p></div></div>
+        <div class="calculator panel"><div class="calc-display"><small>Kalkulator</small><strong id="calcDisplay">0</strong></div><div class="calc-keys" id="calcKeys"><button data-key="C" class="key-muted">C</button><button data-key="(" class="key-muted">(</button><button data-key=")" class="key-muted">)</button><button data-key="/" class="key-op">÷</button><button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button data-key="*" class="key-op">×</button><button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button data-key="-" class="key-op">−</button><button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button data-key="+" class="key-op">+</button><button data-key="0">0</button><button data-key=".">.</button><button data-key="back">⌫</button><button data-key="=" class="key-equal">=</button></div></div>
+      </section>
+
+      <section class="page" id="page-notifications">
+        <div class="section-heading"><div><h2>Notifikasi Pintar</h2><p>Informasi penting tentang aktivitas keuanganmu.</p></div><button class="secondary-btn" id="clearNotifications">Tandai dibaca</button></div><div class="panel notification-list" id="notificationList"></div>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="section-heading"><div><h2>Pengaturan Tampilan</h2><p>Pilih suasana dashboard yang paling nyaman.</p></div></div>
+        <div class="theme-grid"><button class="theme-option selected" data-theme-choice="dark"><span class="theme-preview dark-preview">◈</span><b>Dark Mode</b><small>Hijau neon premium</small></button><button class="theme-option" data-theme-choice="cyber"><span class="theme-preview cyber-preview">◈</span><b>Cyber Blue</b><small>Biru futuristik</small></button><button class="theme-option" data-theme-choice="light"><span class="theme-preview light-preview">◈</span><b>Light Mode</b><small>Terang dan bersih</small></button></div>
+        <div class="panel settings-info"><h3>Data & Privasi</h3><p>Data transaksi disimpan di penyimpanan lokal browser pada perangkat ini. Data tidak dikirim ke server.</p><div class="settings-actions"><button class="secondary-btn" id="exportData">↓ Ekspor data JSON</button><button class="danger-btn" id="resetData">Reset data demo</button></div></div>
+      </section>
+      <footer>© 2026 KINOY MONEY TRACKER <span>Kelola Keuanganmu, Lebih Mudah, Lebih Modern.</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="transactionModal">
+    <form class="modal" id="transactionForm"><div class="modal-head"><div><div class="eyebrow">CATAT KEUANGAN</div><h2 id="transactionModalTitle">Tambah Transaksi</h2></div><button type="button" class="close-modal" data-close-modal>×</button></div>
+      <div class="type-switch"><button type="button" class="active" data-modal-type="income">＋ Pemasukan</button><button type="button" data-modal-type="expense">－ Pengeluaran</button></div>
+      <input type="hidden" id="transactionType" value="income" /><label>Jumlah (Rp)<input id="transactionAmount" type="text" inputmode="numeric" autocomplete="off" placeholder="Contoh: 56.000" required /><small class="amount-hint">Bisa ketik 56000 atau 56.000. Format otomatis mengikuti Rupiah.</small></label>
+      <div class="form-row"><label>Kategori<select id="transactionCategory" required></select></label><label>Tanggal<input id="transactionDate" type="date" required /></label></div>
+      <label>Keterangan<input id="transactionDescription" maxlength="80" placeholder="Contoh: Gaji bulanan" required /></label>
+      <div class="modal-actions"><button type="button" class="secondary-btn" data-close-modal>Batal</button><button class="primary-btn" type="submit">Simpan Transaksi</button></div>
+    </form>
+  </div>
+
+  <div class="modal-backdrop" id="depositModal">
+    <form class="modal" id="depositForm">
+      <div class="modal-head"><div><div class="eyebrow">TABUNGAN</div><h2>Tambah Setoran</h2><p id="depositGoalName" class="deposit-goal-name"></p></div><button type="button" class="close-modal" data-close-deposit>×</button></div>
+      <input type="hidden" id="depositGoalId" />
+      <label>Jumlah Setoran (Rp)<input id="depositAmount" type="text" inputmode="numeric" autocomplete="off" placeholder="Contoh: 56.000" required /><small class="amount-hint">Contoh: 56000 akan tampil sebagai 56.000</small></label>
+      <label>Catatan<input id="depositNote" maxlength="80" placeholder="Contoh: Uang saku disisihkan" /></label>
+      <div class="modal-actions"><button type="button" class="secondary-btn" data-close-deposit>Batal</button><button class="primary-btn" type="submit">Simpan Setoran</button></div>
+    </form>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
